@@ -14,15 +14,12 @@ class ReqTools {
         }
         return $result;
     }
-    function reqPostHttp($url,$body) {
-        $postdata = http_build_query($body);
+    function reqGetHttp($url) {
         $opts = array(
             'http' =>
                 array(
-                    'header' => "Content-Type: application/x-www-form-urlencoded\r\n".
-                    "Content-Length: ".strlen($postdata)."\r\n",     
-                    'method'  => 'POST',
-                    'content' => $postdata
+                    'header' => "Content-Type: application/x-www-form-urlencoded\r\n", 
+                    'method'  => 'GET'
                 )
         );
         $context  = stream_context_create($opts);

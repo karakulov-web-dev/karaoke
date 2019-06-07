@@ -5,7 +5,7 @@ $content = trim(file_get_contents("php://input"));
 $body = json_decode($content);
 
 if (gettype($body->karaoke_item_id) == "integer") {
-    $serialId = $body->serialId;
+    $karaoke_item_id = $body->karaoke_item_id;
 } else {
     $error = 'karaoke_item_id typeError (should: karaoke_item_id == integer)';
 }
@@ -17,9 +17,9 @@ if ($error) {
 
 if (!$error) {
     $reqTools = new ReqTools();
-    $sql = "SELECT COUNT(*) FROM `favorites` WHERE userMac='$userMac'";
-    //$result = $reqTools->reqDb($sql);
-    echo "{\"error\"}:\"false\"";
+    $sql = "UPDATE `stalker_db`.`karaoke` SET countView = countView - 1 WHERE id = {$karaoke_item_id}";
+    $result = $reqTools->reqDb($sql);
+    echo "{\"error\":\"false\"}";
 }
 
 ?>
