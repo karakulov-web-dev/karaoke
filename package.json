@@ -1,0 +1,25 @@
+{
+  "name": "karaoke",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/karakulov-web-dev/karaoke.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/karakulov-web-dev/karaoke/issues"
+  },
+  "homepage": "https://github.com/karakulov-web-dev/karaoke#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-busboy": "^7.0.1",
+    "express-fileupload": "^1.1.5",
+    "md5": "^2.2.1"
+  }
+}

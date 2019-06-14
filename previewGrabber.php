@@ -15,7 +15,7 @@ foreach ($result as $item) {
 
      try {
       $url = $data->items[0]->snippet->thumbnails->medium->url;
-      $fileName = basename($url);
+      $fileName = md5($url).".jpg";
       file_put_contents("/var/www/stalker_portal/misc/karaokePreview/$fileName", file_get_contents($url));
       $sql = "UPDATE `stalker_db`.`karaoke` SET karaokePreview = 'http://212.77.128.177/stalker_portal/misc/karaokePreview/$fileName' WHERE id = ".$item['id'];
       $reqTools->reqDb($sql);
