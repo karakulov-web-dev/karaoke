@@ -2,6 +2,7 @@ const express = require("express");
 var bb = require("express-busboy");
 const md5 = require("md5");
 const path = require("path");
+const rimraf = require("rimraf");
 
 class Api {
   constructor() {
@@ -54,9 +55,7 @@ class Api {
       };
     }
     let link = `/${md5(key).slice(0, 5)}`;
-    this.store.set(key, link, {
-      lastConnectTime: Date.now()
-    });
+    this.store.set(key, link, {});
     return {
       error: false,
       link: "http://localhost:8087" + link
@@ -145,7 +144,7 @@ class Api {
 
   createApiPointGetRecords(app) {
     app.post("/getRecords", (req, res) => {
-      res.send(this.getRecords(req.body, req));
+      res.send(this.getRecords(req.body));
     });
   }
   getRecords({ key }) {
@@ -180,23 +179,30 @@ class StoreKeyKeyAndKeyLink {
     this.mapKeyToStore = {};
     this.mapLinkToKey = {};
     this.mapKeyToLink = {};
+
+    setInterval(() => {
+      this.checkGarbage();
+    }, 300000);
   }
   getByKey(key) {
     if (typeof this.mapKeyToStore[key] === "undefined") {
       return false;
     }
+    this.setLastConnectTime(key);
     return this.mapKeyToStore[key];
   }
   getByLink(link) {
     if (typeof this.mapLinkToKey[link] === "undefined") {
       return false;
     }
+    this.setLastConnectTime(this.mapLinkToKey[link]);
     return this.mapKeyToStore[this.mapLinkToKey[link]];
   }
   set(key, link, store) {
     this.mapKeyToStore[key] = store;
     this.mapLinkToKey[link] = key;
     this.mapKeyToLink[key] = link;
+    this.setLastConnectTime(key);
   }
   deleteByKey(key) {
     delete this.mapKeyToStore[key];
@@ -208,6 +214,28 @@ class StoreKeyKeyAndKeyLink {
     delete this.mapKeyToLink[this.mapLinkToKey[link]];
     delete this.mapLinkToKey[link];
   }
+  setLastConnectTime(key) {
+    if (this.mapKeyToStore[key]) {
+      this.mapKeyToStore[key].lastConnectTime = Date.now();
+    }
+  }
+  checkGarbage() {
+    let currentTime = Date.now();
+    for (let key in this.mapKeyToStore) {
+      if (currentTime - this.mapKeyToStore[key].lastConnectTime > 300000) {
+        this.rmGarbageFiles(this.mapKeyToStore[key]);
+        this.deleteByKey(key);
+      }
+    }
+  }
+  rmGarbageFiles(store) {
+    if (!store.files) {
+      return;
+    }
+    store.files.forEach(file => {
+      rimraf(`./store/${file.file.uuid}`, () => {});
+    });
+  }
 }
 
-const api = new Api();
+new Api();
