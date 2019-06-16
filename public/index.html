@@ -43,9 +43,7 @@
         }
 
         getConnectionInfo(cb) {
-          var url = `http://localhost:8087/getInfo?pathname=${
-            location.pathname
-          }`;
+          var url = `http://localhost/getInfo?pathname=${location.pathname}`;
           var xhr = new XMLHttpRequest();
           xhr.open("POST", url, true);
           xhr.send(JSON.stringify({}));
@@ -99,9 +97,7 @@
         }
 
         sendFile(blob, filename, info, cb) {
-          var url = `http://localhost:8087/postFile?pathname=${
-            location.pathname
-          }`;
+          var url = `http://localhost/postFile?pathname=${location.pathname}`;
           var xhr = new XMLHttpRequest();
           var data = new FormData();
           data.append("audio_data", blob, filename);

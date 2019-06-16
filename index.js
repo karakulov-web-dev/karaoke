@@ -27,10 +27,10 @@ class Api {
     app.use("/store", express.static("store"));
   }
   createApiPointMediaDevice(app) {
-    app.get("/getusermedia.bundle.js", (req, res) => {
+    app.get("/device/getusermedia.bundle.js", (req, res) => {
       res.sendFile(path.join(__dirname, "./public", "getusermedia.bundle.js"));
     });
-    app.get("/*", (req, res, next) => {
+    app.get("/device/*", (req, res, next) => {
       if (!this.store.getByLink(req.url)) {
         res.send(
           "Страница не найдена | Не правильный url адрес | Устройство не подключено"
@@ -39,7 +39,7 @@ class Api {
       }
       next();
     });
-    app.get("/*", (req, res) => {
+    app.get("/device/*", (req, res) => {
       res.sendFile(path.join(__dirname, "./public", "index.html"));
     });
   }
@@ -54,11 +54,11 @@ class Api {
         error: "key not found"
       };
     }
-    let link = `/${md5(key).slice(0, 5)}`;
+    let link = `/device/${md5(key).slice(0, 5)}`;
     this.store.set(key, link, {});
     return {
       error: false,
-      link: "http://localhost:8087" + link
+      link: "http://localhost" + link
     };
   }
   createApiPointPostFile(app) {
@@ -159,7 +159,7 @@ class Api {
     if (!error && store && store.files) {
       files = JSON.parse(JSON.stringify(store.files));
       files.forEach(({ file }) => {
-        file.url = `http://localhost:8087/store/${file.uuid}/${file.field}/${
+        file.url = `http://localhost/store/${file.uuid}/${file.field}/${
           file.filename
         }`;
       });
