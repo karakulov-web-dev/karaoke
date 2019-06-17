@@ -58,7 +58,7 @@ class Api {
     this.store.set(key, link, {});
     return {
       error: false,
-      link: "http://localhost" + link
+      link: "https://votingpay.com/" + link
     };
   }
   createApiPointPostFile(app) {
@@ -159,7 +159,7 @@ class Api {
     if (!error && store && store.files) {
       files = JSON.parse(JSON.stringify(store.files));
       files.forEach(({ file }) => {
-        file.url = `http://localhost/store/${file.uuid}/${file.field}/${
+        file.url = `https://votingpay.com/store/${file.uuid}/${file.field}/${
           file.filename
         }`;
       });
