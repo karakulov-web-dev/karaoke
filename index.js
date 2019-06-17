@@ -58,7 +58,7 @@ class Api {
     this.store.set(key, link, {});
     return {
       error: false,
-      link: "https://votingpay.com/" + link
+      link: "https://votingpay.com" + link
     };
   }
   createApiPointPostFile(app) {
