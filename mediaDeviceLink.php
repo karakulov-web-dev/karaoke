@@ -3,6 +3,7 @@ require_once('./ReqTools.php');
 
 $content = trim(file_get_contents("php://input"));
 $body = json_decode($content);
+$reqTools = new ReqTools();
 
 if (gettype($body->mac) == "string") {
     $macd = $body->mac;
@@ -15,7 +16,11 @@ if ($error) {
 }
 
 if (!$error) {
-    echo "{\"error\":\"false\",\"link\":\"http://device-test.ru/RTF3\"}";
+    $bodyReq = array(
+        'key' => $macd,
+    );
+    $result = $reqTools->reqPostHttp('https://votingpay.com/linkByKey', $bodyReq);
+    echo json_encode($result);
 }
 
 ?>

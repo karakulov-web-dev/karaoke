@@ -55,6 +55,13 @@ class Api {
       };
     }
     let link = `/device/${md5(key).slice(0, 5)}`;
+    if (this.store.getByKey(key)) {
+      try {
+        this.store.rmGarbageFiles(this.store.getByKey(key));
+      } catch (e) {
+        console.log(e);
+      }
+    }
     this.store.set(key, link, {});
     return {
       error: false,
@@ -182,7 +189,7 @@ class StoreKeyKeyAndKeyLink {
 
     setInterval(() => {
       this.checkGarbage();
-    }, 300000);
+    }, 1800000);
   }
   getByKey(key) {
     if (typeof this.mapKeyToStore[key] === "undefined") {
@@ -222,7 +229,7 @@ class StoreKeyKeyAndKeyLink {
   checkGarbage() {
     let currentTime = Date.now();
     for (let key in this.mapKeyToStore) {
-      if (currentTime - this.mapKeyToStore[key].lastConnectTime > 300000) {
+      if (currentTime - this.mapKeyToStore[key].lastConnectTime > 1800000) {
         this.rmGarbageFiles(this.mapKeyToStore[key]);
         this.deleteByKey(key);
       }

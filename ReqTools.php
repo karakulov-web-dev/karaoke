@@ -26,5 +26,35 @@ class ReqTools {
         $data = json_decode(file_get_contents($url, false, $context));
         return $data;
     }
+        function reqPostHttp($url,$body) {
+        $postdata = http_build_query($body);
+        $opts = array(
+            'http' =>
+                array(
+                    'header' => "Content-Type: application/x-www-form-urlencoded\r\n".
+                    "Content-Length: ".strlen($postdata)."\r\n",     
+                    'method'  => 'POST',
+                    'content' => $postdata
+                )
+        );
+        $context  = stream_context_create($opts);
+        $data = json_decode(file_get_contents($url, false, $context));
+        return $data;
+    }
+            function reqPostHttpJson($url,$body) {
+        $postdata = json_encode($body);
+        $opts = array(
+            'http' =>
+                array(
+                    'header' => "Content-Type: application/json\r\n".
+                    "Content-Length: ".strlen($postdata)."\r\n",     
+                    'method'  => 'POST',
+                    'content' => $postdata
+                )
+        );
+        $context  = stream_context_create($opts);
+        $data = json_decode(file_get_contents($url, false, $context));
+        return $data;
+    }
 }
 ?>

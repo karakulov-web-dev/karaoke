@@ -1,0 +1,40 @@
+
+sendPlayLogPhp {
+  найти непрерывные интервалы проигрывания
+  отфильтровать записи
+}
+
+./ffmpeg \
+ -i http://212.77.128.233/media/tv-strg-09/00:1A:79:00:00:00/1043.mpg 
+ -i https://votingpay.com/store/7a01aa71-4b49-4c58-b607-838a9611ce04/audio_data/blob.wav 
+ -i https://votingpay.com/store/61bad2bf-9939-4c95-9751-bd68a3a1de49/audio_data/blob.wav 
+ -i https://votingpay.com/store/aaa169b9-5112-41bb-8c6b-6f83e0905180/audio_data/blob.wav 
+ -i https://votingpay.com/store/0a1084c9-cfee-4deb-a17a-a96cbdc43fb8/audio_data/blob.wav 
+ -i https://votingpay.com/store/e3ce70a2-2762-4c7b-951f-e54134ac9e40/audio_data/blob.wav 
+ -i https://votingpay.com/store/7ac4a16f-97dd-4117-8ce8-482da7b6c5c9/audio_data/blob.wav  
+
+ -filter_complex  
+
+ "
+  [1]adelay=30000|30000[a1] ;
+   [2]adelay=31000|31000[a2]  ;
+    [3]adelay=32000|32000[a3] ;
+     [4]adelay=33000|33000[a4] ;
+      [5]adelay=34000|34000[a5] ; 
+       [6]adelay=35000|35000[a6] ;
+      
+      [0]volume=0.3[aud0] ; 
+      [a1]volume=1[aud1] ;
+       [a2]volume=1[aud2]  ;
+        [a3]volume=1[aud3]  ;
+         [a4]volume=1[aud4]  ;
+         [a5]volume=1[aud5]  ;
+         [a6]volume=1[aud6]  ;
+
+          [aud0][aud1][aud2][aud3][aud4][aud5][aud6]amix=7 
+
+          :dropout_transition=0"
+
+            out.mpg
+
+            INSERT INTO `stalker_db`.`karaoke` (`name`, `description`, `protocol`, `author`, `accessed`, `status`, `added`, `add_by`, `done`, `done_time`, `countView`, `karaokePreview`) VALUES ('Первоклассник', NULL, 'http', 'Ветров В., Георгиев Г.', '1', '1', '2014-12-26 09:03:31', '1', '1', '2014-12-23 16:54:28', '-7', 'http://212.77.128.177/stalker_portal/misc/karaokePreview/d249452ee44c3914943381d56765e04d.jpg');
